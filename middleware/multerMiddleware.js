@@ -22,6 +22,14 @@ const upload = multer({
       const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
       cb(null, `${uniqueSuffix}-${file.originalname}`);
     },
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      if (file.size > 5 * 1024 * 1024) {
+        cb(new Error(`File size too large. Maximum size allowed is 5 MB`));
+      } else {
+        cb(null, true);
+      }
+    },
   }),
 });
 

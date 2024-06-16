@@ -49,7 +49,7 @@ const createProduct = async (req, res, next) => {
     await Category.findByIdAndUpdate(categoryId, {
       $addToSet: { products: product._id },
     });
-
+    console.log(product);
     res.status(201).json({ message: 'success', data: product });
   } catch (error) {
     res.status(404).json({ message: 'Fail', error: error.message });

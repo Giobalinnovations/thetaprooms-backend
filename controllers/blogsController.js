@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
-import Product from '../models/productsModel.js';
+import Blog from '../models/blogsModel.js';
 import Category from '../models/categoryModel.js';
 
-const getAllProducts = async (req, res, next) => {
+const getAllBlogs = async (req, res, next) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const blogs = await Blog.find().sort({ createdAt: -1 });
 
     res.status(200).json({
       message: 'success',
-      results: products.length,
-      data: products,
+      results: blogs.length,
+      data: blogs,
     });
   } catch (error) {
     // next(error);
@@ -17,65 +17,65 @@ const getAllProducts = async (req, res, next) => {
   }
 };
 
-const getProduct = async (req, res, next) => {
+const getBlog = async (req, res, next) => {
   try {
     const id = req.params.id;
     const isValidId = mongoose.Types.ObjectId.isValid(id);
-    const product = isValidId
-      ? await Product.findById(id)
-      : await Product.findOne({ slug: id });
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+    const blog = isValidId
+      ? await Blog.findById(id)
+      : await Blog.findOne({ slug: id });
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
     }
-    res.status(200).json({ message: `get product by id ${id}`, data: product });
+    res.status(200).json({ message: `get blog by id ${id}`, data: blog });
   } catch (error) {
     // next(error);
     res.status(404).json({ message: 'Fail', error: error.message });
   }
 };
 
-const createProduct = async (req, res, next) => {
+const createBlog = async (req, res, next) => {
   const { category: categoryId } = req.body;
   const imageCover = req?.files?.imageCover?.map(file => file?.location)[0];
   const images = req?.files?.images?.map(file => file?.location) || [];
-  const newProductData = { ...req.body, imageCover, images };
+  const newBlogData = { ...req.body, imageCover, images };
 
   try {
-    const product = await Product.create({
-      ...newProductData,
+    const blog = await Blog.create({
+      ...newBlogData,
       category: categoryId,
     });
 
     await Category.findByIdAndUpdate(categoryId, {
-      $addToSet: { products: product._id },
+      $addToSet: { blogs: blog._id },
     });
-    console.log(product);
-    res.status(201).json({ message: 'success', data: product });
+    console.log(blog);
+    res.status(201).json({ message: 'success', data: blog });
   } catch (error) {
     res.status(404).json({ message: 'Fail', error: error.message });
     // next(error);
   }
 };
 
-const updateProduct = async (req, res, next) => {
+const updateBlog = async (req, res, next) => {
   const { id } = req.params;
-  const newProductData = { ...req.body };
+  const newBlogData = { ...req.body };
   try {
     const isValidId = mongoose.Types.ObjectId.isValid(id);
-    const product = isValidId
-      ? await Product.findById(id)
-      : await Product.findOne({
+    const blog = isValidId
+      ? await Blog.findById(id)
+      : await Blog.findOne({
           slug: id,
         });
 
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
     }
 
     const imageCover =
       req?.files?.imageCover?.map(file => file?.location)[0] ||
       req.body.imageCover ||
-      product.imageCover;
+      blog.imageCover;
     const images =
       typeof req.body.images === 'string'
         ? req.body.images.split(',').filter(Boolean)
@@ -84,37 +84,31 @@ const updateProduct = async (req, res, next) => {
             ...(req?.files?.images?.map(file => file?.location) || []),
           ];
 
-    await Product.findByIdAndUpdate(id, {
-      ...newProductData,
+    await Blog.findByIdAndUpdate(id, {
+      ...newBlogData,
       imageCover,
       images,
     });
 
-    res.status(200).json({ message: `Product updated ${id}` });
+    res.status(200).json({ message: `Blog updated ${id}` });
   } catch (error) {
     // next(error);
     res.status(404).json({ message: 'Fail', error: error.message });
   }
 };
 
-const deleteProduct = async (req, res, next) => {
+const deleteBlog = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const product = await Product.findByIdAndDelete(id);
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+    const blog = await Blog.findByIdAndDelete(id);
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
     }
-    res.status(200).json({ message: `Product deleted ${id}` });
+    res.status(200).json({ message: `Blog deleted ${id}` });
   } catch (error) {
     // next(error);
     res.status(404).json({ message: 'Fail', error: error.message });
   }
 };
 
-export {
-  getAllProducts,
-  getProduct,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-};
+export { getAllBlogs, getBlog, createBlog, updateBlog, deleteBlog };

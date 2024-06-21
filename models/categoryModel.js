@@ -8,10 +8,10 @@ const categorySchema = new Schema(
       trim: true,
       index: { unique: true },
     },
-    products: [
+    blogs: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'Blog',
       },
     ],
 

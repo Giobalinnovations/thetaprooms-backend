@@ -50,13 +50,13 @@ const blogSchema = new Schema(
       required: [true, 'Image cover alt is required'],
     },
 
-    imagesCaption: {
+    imageCoverCaption: {
       type: String,
       trim: true,
       required: [true, 'Image cover caption is required'],
     },
 
-    imagesDescription: {
+    imageCoverDescription: {
       type: String,
       trim: true,
       required: [true, 'Image description is required'],

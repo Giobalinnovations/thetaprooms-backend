@@ -32,23 +32,11 @@ blogsRouter.param('id', async (req, res, next, id) => {
 blogsRouter
   .route('/')
   .get(getAllBlogs)
-  .post(
-    uploadFiles([
-      { name: 'imageCover', maxCount: 1 },
-      { name: 'images', maxCount: 10 },
-    ]),
-    createBlog
-  );
+  .post(uploadFiles([{ name: 'imageCover', maxCount: 1 }]), createBlog);
 blogsRouter
   .route('/:id')
   .get(getBlog)
-  .patch(
-    uploadFiles([
-      { name: 'imageCover', maxCount: 1 },
-      { name: 'images', maxCount: 10 },
-    ]),
-    updateBlog
-  )
+  .put(uploadFiles([{ name: 'imageCover', maxCount: 1 }]), updateBlog)
   .delete(deleteBlog);
 
 export default blogsRouter;

@@ -69,7 +69,7 @@ const getBlog = async (req, res, next) => {
 const createBlog = async (req, res, next) => {
   const { category: categoryId } = req.body;
   const imageCover = req?.files?.imageCover?.map(file => file?.location)[0];
-  const images = req?.files?.images?.map(file => file?.location) || [];
+
   const newBlogData = { ...req.body, imageCover, images };
 
   try {
@@ -91,7 +91,9 @@ const createBlog = async (req, res, next) => {
 
 const updateBlog = async (req, res, next) => {
   const { id } = req.params;
-  const newBlogData = { ...req.body };
+  const { slug, ...newBlogData } = req.body;
+  console.log(newBlogData);
+
   try {
     const isValidId = mongoose.Types.ObjectId.isValid(id);
     const blog = isValidId
@@ -104,23 +106,31 @@ const updateBlog = async (req, res, next) => {
       return res.status(404).json({ message: 'Blog not found' });
     }
 
-    const imageCover =
-      req?.files?.imageCover?.map(file => file?.location)[0] ||
-      req.body.imageCover ||
-      blog.imageCover;
-    const images =
-      typeof req.body.images === 'string'
-        ? req.body.images.split(',').filter(Boolean)
-        : [
-            ...(tour.images || []),
-            ...(req?.files?.images?.map(file => file?.location) || []),
-          ];
+    let imageCover;
 
-    await Blog.findByIdAndUpdate(id, {
-      ...newBlogData,
-      imageCover,
-      images,
-    });
+    if (req?.files?.imageCover?.length) {
+      imageCover = req?.files?.imageCover?.map(file => file?.location)[0];
+    } else if (req.body.imageCover) {
+      imageCover = req.body.imageCover[0].preview;
+    } else {
+      imageCover = blog.imageCover;
+    }
+    // const imageCover =
+    //   req?.files?.imageCover?.map(file => file?.location)[0] ||
+    //   req.body.imageCover ||
+    //   blog.imageCover;
+
+    await Blog.findByIdAndUpdate(
+      id,
+      {
+        ...newBlogData,
+        imageCover,
+      },
+      {
+        new: true,
+        // revalidate: true,
+      }
+    );
 
     res.status(200).json({ message: `Blog updated ${id}` });
   } catch (error) {

@@ -70,7 +70,7 @@ const createBlog = async (req, res, next) => {
   const { category: categoryId } = req.body;
   const imageCover = req?.files?.imageCover?.map(file => file?.location)[0];
 
-  const newBlogData = { ...req.body, imageCover, images };
+  const newBlogData = { ...req.body, imageCover };
 
   try {
     const blog = await Blog.create({

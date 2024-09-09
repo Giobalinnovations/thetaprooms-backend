@@ -5,6 +5,7 @@ import Category from '../models/categoryModel.js';
 const getAllBlogs = async (req, res, next) => {
   try {
     const queryObj = { ...req.query };
+
     const excludedFields = ['page', 'sort', 'limit', 'fields', 'category'];
     excludedFields.forEach(el => delete queryObj[el]);
 
@@ -81,7 +82,7 @@ const createBlog = async (req, res, next) => {
     await Category.findByIdAndUpdate(categoryId, {
       $addToSet: { blogs: blog._id },
     });
-    console.log(blog);
+
     res.status(201).json({ message: 'success', data: blog });
   } catch (error) {
     res.status(404).json({ message: 'Fail', error: error.message });
@@ -92,7 +93,6 @@ const createBlog = async (req, res, next) => {
 const updateBlog = async (req, res, next) => {
   const { id } = req.params;
   const { slug, ...newBlogData } = req.body;
-  console.log(newBlogData);
 
   try {
     const isValidId = mongoose.Types.ObjectId.isValid(id);

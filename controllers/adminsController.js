@@ -25,8 +25,6 @@ const registerAdmin = async (req, res, next) => {
         .json({ message: 'Email and Password is required' });
     }
 
-    console.log(req.body);
-
     const admins = await Admin.findOne({ email: req.body.email });
 
     if (admins) {

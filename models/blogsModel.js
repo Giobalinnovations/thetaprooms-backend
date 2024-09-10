@@ -76,6 +76,23 @@ const blogSchema = new Schema(
       type: Date,
       default: Date.now(),
     },
+
+    faqs: {
+      type: [
+        {
+          question: {
+            type: String,
+            required: [true, 'FAQ question is required'],
+            trim: true,
+          },
+          answer: {
+            type: String,
+            required: [true, 'FAQ answer is required'],
+            trim: true,
+          },
+        },
+      ],
+    },
   },
   {
     timestamps: true,

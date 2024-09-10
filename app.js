@@ -10,7 +10,7 @@ dotenv.config();
 dbConnect();
 
 const port = process.env.PORT || 8000;
-
+console.log(process.env.PORT);
 const app = express();
 app.use(express.json());
 app.use(cors());

@@ -69,9 +69,10 @@ const getBlog = async (req, res, next) => {
 
 const createBlog = async (req, res, next) => {
   const { category: categoryId } = req.body;
+  const faqs = JSON.parse(req.body.faqs) ?? [];
   const imageCover = req?.files?.imageCover?.map(file => file?.location)[0];
 
-  const newBlogData = { ...req.body, imageCover };
+  const newBlogData = { ...req.body, imageCover, faqs };
 
   try {
     const blog = await Blog.create({
@@ -92,6 +93,7 @@ const createBlog = async (req, res, next) => {
 
 const updateBlog = async (req, res, next) => {
   const { id } = req.params;
+  const faqs = JSON.parse(req.body.faqs) ?? [];
   const { slug, ...newBlogData } = req.body;
 
   try {
@@ -124,6 +126,7 @@ const updateBlog = async (req, res, next) => {
       id,
       {
         ...newBlogData,
+        faqs,
         imageCover,
       },
       {

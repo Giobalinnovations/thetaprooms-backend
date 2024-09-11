@@ -20,6 +20,17 @@ const blogSchema = new Schema(
       required: [true, 'Meta Description is required'],
     },
 
+    keywords: {
+      type: String,
+      trim: true,
+    },
+
+    heading: {
+      type: String,
+      required: [true, 'Heading is required'],
+      trim: true,
+    },
+
     excerpt: {
       type: String,
       trim: true,

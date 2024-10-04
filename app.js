@@ -14,6 +14,10 @@ console.log(process.env.PORT);
 const app = express();
 app.use(express.json());
 app.use(cors());
+// Default route
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome To Budgetree Api Test Server' });
+});
 app.use('/api/v1/blogs', blogsRouter);
 app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/admins', adminsRouter);

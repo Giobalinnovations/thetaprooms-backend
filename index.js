@@ -22,8 +22,8 @@ app.use('/api/v1/blogs', blogsRouter);
 app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/admins', adminsRouter);
 
-app.listen(port, () => {
-  console.log(`app running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`app running on port ${port}`);
+// });
 
 export default app;

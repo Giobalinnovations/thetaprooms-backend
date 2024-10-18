@@ -25,3 +25,5 @@ app.use('/api/v1/admins', adminsRouter);
 app.listen(port, () => {
   console.log(`app running on port ${port}`);
 });
+
+module.exports = app;
